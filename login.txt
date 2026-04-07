@@ -1,0 +1,10 @@
+List<String> list = List.of("Finance,2", "RH,3", "Commercial,4");
+
+for (String item : list) {
+    String[] parts = item.split(",");
+
+    String nom = parts[0];
+    int id = Integer.parseInt(parts[1]);
+
+    System.out.println("Nom: " + nom + " | Id: " + id);
+}

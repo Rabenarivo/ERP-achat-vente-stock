@@ -142,6 +142,9 @@ CREATE TABLE bon_commandes (
     FOREIGN KEY (proforma_id) REFERENCES proformas(id)
 );
 
+
+
+
 -- =========================
 -- SEED DATA REALISTE
 -- =========================
@@ -210,3 +213,50 @@ INSERT INTO demandes_achat (produit, quantite, department_id, statut) VALUES
 INSERT INTO proformas (demande_id, fournisseur_id, prix, delai, statut) VALUES
 (1, 1, 7000000, 7, 'EN_ATTENTE'),
 (1, 2, 6800000, 10, 'EN_ATTENTE');
+
+
+
+
+
+CREATE TABLE department_access (
+    id SERIAL PRIMARY KEY,
+    department_id INT,
+    can_view_department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(id),
+    FOREIGN KEY (can_view_department_id) REFERENCES departments(id)
+);
+
+
+
+
+-- 👑 Direction peut tout voir
+INSERT INTO department_access (department_id, can_view_department_id) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5);
+
+-- 💰 Finance peut voir Finance + IT + Commercial
+INSERT INTO department_access (department_id, can_view_department_id) VALUES
+(2, 2),
+(2, 3),
+(2, 4);
+
+-- 💻 IT peut voir seulement IT
+INSERT INTO department_access (department_id, can_view_department_id) VALUES
+(3, 3);
+
+-- 📊 Commercial peut voir seulement Commercial
+INSERT INTO department_access (department_id, can_view_department_id) VALUES
+(4, 4);
+
+-- 👥 RH peut voir RH + Finance
+INSERT INTO department_access (department_id, can_view_department_id) VALUES
+(5, 5),
+(5, 2);
+
+SELECT d.nom,d.id
+FROM department_access da
+JOIN departments d ON d.id = da.can_view_department_id
+WHERE da.department_id = 2;
