@@ -1,45 +1,10 @@
-users
-  ↓
-user_roles
-  ↓
-roles
+List<String> list = List.of("Finance,2", "RH,3", "Commercial,4");
 
-users
-  ↓
-departments
+for (String item : list) {
+    String[] parts = item.split(",");
 
-CREATE TABLE departments (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL UNIQUE
-);
+    String nom = parts[0];
+    int id = Integer.parseInt(parts[1]);
 
--- =========================
--- TABLE : roles
--- =========================
-CREATE TABLE roles (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(50) NOT NULL UNIQUE
-);
-
--- =========================
--- TABLE : users
--- =========================
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(100),
-    email VARCHAR(150) UNIQUE,
-    password VARCHAR(255),
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(id)
-);
-
--- =========================
--- TABLE : user_roles
--- =========================
-CREATE TABLE user_roles (
-    user_id INT,
-    role_id INT,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES roles(id)
-);
+    System.out.println("Nom: " + nom + " | Id: " + id);
+}
