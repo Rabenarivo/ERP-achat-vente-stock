@@ -5,5 +5,5 @@ public interface DepartmentAccessProjection {
 
     String getDepartment();
 
-    String getAccessLevel();
+    int getAccessLevel();
 }
