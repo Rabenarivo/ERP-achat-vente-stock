@@ -8,11 +8,8 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* 🔓 Public */}
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
-
-          {/* 🔐 Protected */}
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
