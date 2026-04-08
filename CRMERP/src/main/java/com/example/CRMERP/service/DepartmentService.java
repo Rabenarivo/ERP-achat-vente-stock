@@ -27,4 +27,8 @@ public class DepartmentService {
     public List<DepartmentAccessProjection> viewDepartementAcces(Long idDepartement) {
         return repo.findAccessibleDepartments(idDepartement);
     }
+
+    public Department findById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }
