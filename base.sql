@@ -256,7 +256,31 @@ INSERT INTO department_access (department_id, can_view_department_id) VALUES
 (5, 5),
 (5, 2);
 
-SELECT d.nom,d.id
-FROM department_access da
-JOIN departments d ON d.id = da.can_view_department_id
-WHERE da.department_id = 2;
+CREATE TABLE workflow_logs (
+    id SERIAL PRIMARY KEY,
+    demande_id INT,
+    action VARCHAR(100),
+    user_id INT,
+    department_id INT,
+    commentaire TEXT,
+    date_action TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (demande_id) REFERENCES demandes_achat(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+
+ALTER TABLE demandes_achat
+ADD COLUMN user_id INT;
+
+ALTER TABLE demandes_achat
+ADD CONSTRAINT fk_demande_user
+FOREIGN KEY (user_id)
+REFERENCES users(id);
+
+
+-- SELECT d.nom,d.id
+-- FROM department_access da
+-- JOIN departments d ON d.id = da.can_view_department_id
+-- WHERE da.department_id = 2;
