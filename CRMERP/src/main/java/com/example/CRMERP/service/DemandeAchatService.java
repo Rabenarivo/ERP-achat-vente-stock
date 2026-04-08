@@ -1,12 +1,14 @@
 package com.example.CRMERP.service;
 
 import com.example.CRMERP.entity.DemandeAchat;
+import com.example.CRMERP.entity.Department;
+import com.example.CRMERP.entity.User;
 import com.example.CRMERP.repository.DemandeAchatRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Service
 public class DemandeAchatService {
 
         private final DemandeAchatRepository repo;
@@ -23,4 +25,10 @@ public class DemandeAchatService {
         public DemandeAchat save(DemandeAchat d) {
             return repo.save(d);
         }
+
+       public DemandeAchat findById(Long id) {
+            return repo.findById(id).orElse(null);
+        }
+
+
 }
