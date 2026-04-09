@@ -57,7 +57,7 @@ function App() {
           <Route
             path="/pages/demandes-achat"
             element={
-              <ProtectedPage minScore={50}>
+              <ProtectedPage minScore={10}>
                 <DemandeAchatPage />
               </ProtectedPage>
             }

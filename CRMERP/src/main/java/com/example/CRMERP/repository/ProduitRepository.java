@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProduitRepository extends JpaRepository<Produit, Long> {
 
-@Query("SELECT p FROM Produit p WHERE LOWER(p.nom) LIKE LOWER(CONCAT('%', :nom, '%'))")
+@Query("SELECT p FROM Produit p WHERE LOWER(TRIM(p.nom)) LIKE LOWER(CONCAT('%', TRIM(:nom), '%'))")
 List<Produit> searchByName(@Param("nom") String nom);
    
 }

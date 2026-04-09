@@ -1,5 +1,6 @@
 package com.example.CRMERP.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Produit {
 
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<StockMovement> stockMovements;
 
 

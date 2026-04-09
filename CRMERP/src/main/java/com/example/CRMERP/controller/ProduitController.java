@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,8 +53,38 @@ public class ProduitController {
     }
 
     @GetMapping("/filtre")
-    public String getByNom(@RequestParam String param) {
-        return produitRepository.searchByName(param).toString();
+    public List<Produit> getByNom(@RequestParam String param) {
+        return searchProduitsByAnyWord(param);
+    }
+
+    @GetMapping("/filtres")
+    public List<Produit> getByNomPlural(@RequestParam String param) {
+        return searchProduitsByAnyWord(param);
+    }
+
+    private List<Produit> searchProduitsByAnyWord(String param) {
+        String normalizedParam = param == null ? "" : param.trim();
+        if (normalizedParam.isEmpty()) {
+            return List.of();
+        }
+
+        // Keep insertion order and remove duplicates by product id.
+        Map<Long, Produit> uniqueById = new LinkedHashMap<>();
+
+        String[] tokens = normalizedParam.split("\\s+");
+        for (String token : tokens) {
+            String word = token.trim();
+            if (word.isEmpty()) {
+                continue;
+            }
+
+            List<Produit> matches = produitRepository.searchByName(word);
+            for (Produit produit : matches) {
+                uniqueById.put(produit.getId(), produit);
+            }
+        }
+
+        return List.copyOf(uniqueById.values());
     }
 
     @PostMapping
