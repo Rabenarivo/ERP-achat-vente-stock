@@ -4,10 +4,11 @@ import { AuthContext } from "../../context/AuthContext";
 import { getUserDepartmentScore } from "../../config/departmentScores";
 
 const PAGE_TYPES = [
-  { score: 50, path: "/pages/type-50" },
-  { score: 70, path: "/pages/type-70" },
-  { score: 80, path: "/pages/type-80" },
-  { score: 100, path: "/pages/type-100" },
+  { score: 10, path: "/pages/type-10", label: "Workflow Demande d'achat" },
+  { score: 50, path: "/pages/type-50", label: "Demande d'achat" },
+  { score: 70, path: "/pages/type-70", label: "Validation Offres" },
+  { score: 80, path: "/pages/type-80", label: "Validation Proforma et Envoi BC" },
+  { score: 100, path: "/pages/type-100", label: "Creation Proformat (Admin)" },
 ];
 
 export default function Dashboard() {
@@ -51,14 +52,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <h3>Types de pages disponibles</h3>
+      <h3>Pages disponibles</h3>
       <ul className="list-group">
         {PAGE_TYPES.map((page) => (
           <li key={page.score} className="list-group-item">
-            {userScore >= page.score ? (
-              <Link to={page.path}>Type {page.score}</Link>
+            {userScore === page.score ? (
+              <Link to={page.path}>{page.label}</Link>
             ) : (
-              <span className="text-muted">Type {page.score} (locked)</span>
+              <span className="text-muted">{page.label} (locked)</span>
             )}
           </li>
         ))}

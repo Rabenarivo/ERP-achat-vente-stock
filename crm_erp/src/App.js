@@ -4,7 +4,6 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import { AuthProvider } from "./context/AuthContext";
 import ScoreProtectedRoute from "./components/ScoreProtectedRoute";
 import Unauthorized from "./pages/common/Unauthorized";
-import Type50Page from "./pages/types/Type50Page";
 import Type10Page from "./pages/types/type10Pages";
 import Type70Page from "./pages/types/Type70Page";
 import Type80Page from "./pages/types/Type80Page";
@@ -12,9 +11,9 @@ import Type100Page from "./pages/types/Type100Page";
 import DemandeAchatPage from "./pages/demandes-achat/DemandeAchatPage";
 import PageLayout from "./components/PageLayout";
 
-function ProtectedPage({ minScore, children }) {
+function ProtectedPage({ minScore, requiredScore, children }) {
   return (
-    <ScoreProtectedRoute minScore={minScore}>
+    <ScoreProtectedRoute minScore={minScore} requiredScore={requiredScore}>
       <PageLayout>{children}</PageLayout>
     </ScoreProtectedRoute>
   );
@@ -41,7 +40,7 @@ function App() {
           <Route
             path="/pages/type-10"
             element={
-              <ProtectedPage minScore={10}>
+              <ProtectedPage requiredScore={10}>
                 <Type10Page />
               </ProtectedPage>
             }
@@ -49,15 +48,15 @@ function App() {
           <Route
             path="/pages/type-50"
             element={
-              <ProtectedPage minScore={50}>
-                <Type50Page />
+              <ProtectedPage requiredScore={50}>
+                <DemandeAchatPage />
               </ProtectedPage>
             }
           />
           <Route
             path="/pages/demandes-achat"
             element={
-              <ProtectedPage minScore={10}>
+              <ProtectedPage requiredScore={50}>
                 <DemandeAchatPage />
               </ProtectedPage>
             }
@@ -66,7 +65,7 @@ function App() {
           <Route
             path="/pages/type-70"
             element={
-              <ProtectedPage minScore={70}>
+              <ProtectedPage requiredScore={70}>
                 <Type70Page />
               </ProtectedPage>
             }
@@ -75,7 +74,7 @@ function App() {
           <Route
             path="/pages/type-80"
             element={
-              <ProtectedPage minScore={80}>
+              <ProtectedPage requiredScore={80}>
                 <Type80Page />
               </ProtectedPage>
             }
@@ -84,7 +83,7 @@ function App() {
           <Route
             path="/pages/type-100"
             element={
-              <ProtectedPage minScore={100}>
+              <ProtectedPage requiredScore={100}>
                 <Type100Page />
               </ProtectedPage>
             }

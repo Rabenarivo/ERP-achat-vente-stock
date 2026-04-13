@@ -104,7 +104,7 @@ export default function Type100Page() {
       <div className="page-card__header">
         <div>
           <p className="page-eyebrow">Score 100</p>
-          <h2>Log Admin - Creation Proformat</h2>
+          <h2>Creation Proformat (Admin)</h2>
         </div>
         <p className="page-muted">Source: GET /api/offres/get-offre | Save: POST /api/proforma/save-proforma</p>
       </div>

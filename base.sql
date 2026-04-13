@@ -1,9 +1,11 @@
+-- =====================================
+-- RESET
+-- =====================================
 SET session_replication_role = replica;
 
--- =========================
--- DROP TABLES (ordre important)
--- =========================
 DROP TABLE IF EXISTS workflow_logs CASCADE;
+DROP TABLE IF EXISTS stock_movements CASCADE;
+DROP TABLE IF EXISTS offres CASCADE;
 DROP TABLE IF EXISTS department_access CASCADE;
 DROP TABLE IF EXISTS bon_commandes CASCADE;
 DROP TABLE IF EXISTS proformas CASCADE;
@@ -20,38 +22,33 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
 
--- =========================
--- Réactiver contraintes
--- =========================
 SET session_replication_role = DEFAULT;
 
+-- =====================================
+-- TABLES PRINCIPALES
+-- =====================================
 
-
-
-
--- =========================
--- DATABASE : CRM + ERP
--- =========================
-
--- =========================
--- TABLE : departments
--- =========================
 CREATE TABLE departments (
     id SERIAL PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL UNIQUE
+    nom VARCHAR(100) NOT NULL UNIQUE,
+    scores INT
 );
 
--- =========================
--- TABLE : roles
--- =========================
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL UNIQUE
 );
 
--- =========================
--- TABLE : users
--- =========================
+CREATE TABLE fournisseurs (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    contact VARCHAR(100)
+);
+
+-- =====================================
+-- TABLES AVEC FK
+-- =====================================
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100),
@@ -62,21 +59,6 @@ CREATE TABLE users (
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
--- =========================
--- TABLE : user_roles
--- =========================
-CREATE TABLE user_roles (
-    user_id INT,
-    role_id INT,
-    PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (role_id) REFERENCES roles(id)
-);
-
--- =========================
--- CRM TABLES
--- =========================
-
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     nom VARCHAR(100),
@@ -85,6 +67,39 @@ CREATE TABLE clients (
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
+
+CREATE TABLE produits (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100),
+    prix NUMERIC(10,2),
+    stock INT,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+-- =====================================
+-- TABLES DE LIAISON
+-- =====================================
+
+CREATE TABLE user_roles (
+    user_id INT,
+    role_id INT,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE department_access (
+    department_id INT,
+    can_view_department_id INT,
+    PRIMARY KEY (department_id, can_view_department_id),
+    FOREIGN KEY (department_id) REFERENCES departments(id),
+    FOREIGN KEY (can_view_department_id) REFERENCES departments(id)
+);
+
+-- =====================================
+-- CRM
+-- =====================================
 
 CREATE TABLE interactions (
     id SERIAL PRIMARY KEY,
@@ -103,18 +118,9 @@ CREATE TABLE opportunites (
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
--- =========================
--- ERP TABLES
--- =========================
-
-CREATE TABLE produits (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(100),
-    prix NUMERIC(10,2),
-    stock INT,
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(id)
-);
+-- =====================================
+-- ERP
+-- =====================================
 
 CREATE TABLE commandes (
     id SERIAL PRIMARY KEY,
@@ -136,9 +142,9 @@ CREATE TABLE transactions (
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
--- =========================
+-- =====================================
 -- WORKFLOW ACHAT
--- =========================
+-- =====================================
 
 CREATE TABLE demandes_achat (
     id SERIAL PRIMARY KEY,
@@ -146,13 +152,9 @@ CREATE TABLE demandes_achat (
     quantite INT,
     department_id INT,
     statut VARCHAR(50),
-    FOREIGN KEY (department_id) REFERENCES departments(id)
-);
-
-CREATE TABLE fournisseurs (
-    id SERIAL PRIMARY KEY,
-    nom VARCHAR(100),
-    contact VARCHAR(100)
+    user_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE proformas (
@@ -174,17 +176,68 @@ CREATE TABLE bon_commandes (
     FOREIGN KEY (proforma_id) REFERENCES proformas(id)
 );
 
+-- =====================================
+-- AUTRES TABLES
+-- =====================================
 
+CREATE TABLE workflow_logs (
+    id SERIAL PRIMARY KEY,
+    demande_id INT,
+    action VARCHAR(100),
+    user_id INT,
+    department_id INT,
+    commentaire TEXT,
+    date_action TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (demande_id) REFERENCES demandes_achat(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
 
+CREATE TABLE stock_movements (
+    id SERIAL PRIMARY KEY,
+    produit_id INT,
+    type VARCHAR(20),
+    quantite INT,
+    date_mouvement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT,
+    commentaire TEXT,
+    FOREIGN KEY (produit_id) REFERENCES produits(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
--- =========================
--- SEED DATA REALISTE
--- =========================
+CREATE TABLE offres (
+    id SERIAL PRIMARY KEY,
+    demande_id INT NOT NULL,
+    fournisseur_id INT NOT NULL,
+    reference VARCHAR(100),
+    delai_livraison INT,
+    validite DATE,
+    description TEXT,
+    statut VARCHAR(50) DEFAULT 'EN_ATTENTE',
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (demande_id) REFERENCES demandes_achat(id),
+    FOREIGN KEY (fournisseur_id) REFERENCES fournisseurs(id)
+);
 
+-- =====================================
+-- SEEDS
+-- =====================================
 
+-- Departments
+INSERT INTO departments (nom, scores) VALUES
+('Direction', 100),
+('Finance', 80),
+('RH', 70),
+('Commercial', 90),
+('IT', 50),
+('Magasiner', 10);
 
 -- Roles
-
+INSERT INTO roles (nom) VALUES
+('ADMIN'),
+('FINANCE'),
+('RH'),
+('USER');
 
 -- Users
 INSERT INTO users (nom, email, password, enabled, department_id) VALUES
@@ -197,12 +250,7 @@ INSERT INTO users (nom, email, password, enabled, department_id) VALUES
 
 -- User Roles
 INSERT INTO user_roles VALUES
-(1,1),
-(2,2),
-(3,3),
-(4,4),
-(5,4),
-(6,4);
+(1,1),(2,2),(3,3),(4,4),(5,4),(6,4);
 
 -- Clients
 INSERT INTO clients (nom, email, telephone, department_id) VALUES
@@ -229,118 +277,22 @@ INSERT INTO fournisseurs (nom, contact) VALUES
 ('Tech Supplier', 'contact@tech.com'),
 ('Global IT', 'contact@globalit.com');
 
--- Demande achat
-INSERT INTO demandes_achat (produit, quantite, department_id, statut) VALUES
-('Ordinateur', 5, 5, 'EN_ATTENTE');
+-- Demandes achat
+INSERT INTO demandes_achat (produit, quantite, department_id, statut, user_id) VALUES
+('Ordinateur', 5, 5, 'EN_ATTENTE', 5);
 
--- Proforma
+-- Proformas
 INSERT INTO proformas (demande_id, fournisseur_id, prix, delai, statut) VALUES
 (1, 1, 7000000, 7, 'EN_ATTENTE'),
 (1, 2, 6800000, 10, 'EN_ATTENTE');
 
-
-
-
-
-
-
--- 👑 Direction peut tout voir
-INSERT INTO department_access (department_id, can_view_department_id) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 5);
-
--- 💰 Finance peut voir Finance + IT + Commercial
-INSERT INTO department_access (department_id, can_view_department_id) VALUES
-(2, 2),
-(2, 3),
-(2, 4);
-
--- 💻 IT peut voir seulement IT
-INSERT INTO department_access (department_id, can_view_department_id) VALUES
-(3, 3);
-
--- 📊 Commercial peut voir seulement Commercial
-INSERT INTO department_access (department_id, can_view_department_id) VALUES
-(4, 4);
-
--- 👥 RH peut voir RH + Finance
-INSERT INTO department_access (department_id, can_view_department_id) VALUES
-(5, 5),
-(5, 2);
-
-CREATE TABLE workflow_logs (
-    id SERIAL PRIMARY KEY,
-    demande_id INT,
-    action VARCHAR(100),
-    user_id INT,
-    department_id INT,
-    commentaire TEXT,
-    date_action TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (demande_id) REFERENCES demandes_achat(id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (department_id) REFERENCES departments(id)
-);
-
-
-ALTER TABLE demandes_achat
-ADD COLUMN user_id INT;
-
-ALTER TABLE demandes_achat
-ADD CONSTRAINT fk_demande_user
-FOREIGN KEY (user_id)
-REFERENCES users(id);
-
-
-
-alter table departments add column scores int;
-
-INSERT INTO departments (nom, scores) VALUES
-('Direction', 100),
-('Finance', 80),
-('RH', 70),
-('Commercial', 90),
-('IT', 50),
-('Magasiner', 10);
-
-
-CREATE TABLE stock_movements (
-    id SERIAL PRIMARY KEY,
-    produit_id INT,
-    type VARCHAR(20), -- ENTREE / SORTIE
-    quantite INT,
-    date_mouvement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INT,
-    commentaire TEXT,
-
-    FOREIGN KEY (produit_id) REFERENCES produits(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-
-CREATE TABLE offres (
-    id SERIAL PRIMARY KEY,
-
-    demande_id INT NOT NULL,
-    fournisseur_id INT NOT NULL,
-
-    reference VARCHAR(100),
-    delai_livraison INT, -- en jours
-
-    validite DATE, -- date de validité de l'offre
-    description TEXT,
-
-    statut VARCHAR(50) DEFAULT 'EN_ATTENTE',
-
-    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (demande_id) REFERENCES demandes_achat(id),
-    FOREIGN KEY (fournisseur_id) REFERENCES fournisseurs(id)
-);
-
+-- Department access
+INSERT INTO department_access VALUES
+(1,1),(1,2),(1,3),(1,4),(1,5),
+(2,2),(2,3),(2,4),
+(3,3),
+(4,4),
+(5,5),(5,2);
 
 -- SELECT d.nom,d.id
 -- FROM department_access da
