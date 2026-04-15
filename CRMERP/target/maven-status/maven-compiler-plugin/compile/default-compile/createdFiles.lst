@@ -20,6 +20,7 @@ com\example\CRMERP\service\StockMouvementService.class
 com\example\CRMERP\repository\WorkflowLogRepository.class
 com\example\CRMERP\repository\DemandeAchatRepository.class
 com\example\CRMERP\controller\UserController.class
+com\example\CRMERP\controller\BonCommandeController.class
 com\example\CRMERP\entity\Produit.class
 com\example\CRMERP\repository\RoleRepository.class
 com\example\CRMERP\controller\WorkflowLogControlle.class

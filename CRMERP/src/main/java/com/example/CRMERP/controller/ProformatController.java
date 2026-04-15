@@ -109,6 +109,11 @@ public class ProformatController {
         return proformaService.getEnAttenteValidation();
     }
 
+    @GetMapping("/all")
+    public List<Proforma> all() {
+        return proformaService.findAll();
+    }
+
     @PostMapping("/save-bc")
     @Transactional
     public ResponseEntity<?> saveBc(@RequestBody Map<String, Object> request) {

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getDemandesAchat } from "../../api/demandeAchatApi";
 import { updateDemandeAchatStatut } from "../../api/demandeAchatApi";
 import { filterProduitsByName } from "../../api/produitApi";
 import { getFournisseurs } from "../../api/fournisseurApi";
 import { createOffre } from "../../api/offreApi";
+import { MiniBarChart, StatGrid } from "../../components/StatsWidgets";
 
 const normalizeName = (value) =>
   String(value || "")
@@ -35,6 +36,30 @@ export default function Type10Page() {
   });
   const [error, setError] = useState("");
   const [offreMessage, setOffreMessage] = useState("");
+
+  const totalQuantite = useMemo(
+    () => demandes.reduce((sum, demande) => sum + Number(demande?.quantite || 0), 0),
+    [demandes]
+  );
+
+  const demandesByProduit = useMemo(() => {
+    const counter = new Map();
+    demandes.forEach((demande) => {
+      const produit = String(demande?.produit || "Produit inconnu");
+      counter.set(produit, (counter.get(produit) || 0) + Number(demande?.quantite || 0));
+    });
+    return Array.from(counter.entries())
+      .map(([label, value]) => ({ label, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 6);
+  }, [demandes]);
+
+  const statCards = [
+    { label: "Demandes a verifier", value: demandes.length },
+    { label: "Quantite totale", value: totalQuantite },
+    { label: "Fournisseurs selectionnes", value: selectedFournisseurIds.length },
+    { label: "Fournisseurs disponibles", value: fournisseurs.length },
+  ];
 
   useEffect(() => {
     const loadDemandes = async () => {
@@ -216,6 +241,14 @@ export default function Type10Page() {
       </div>
 
       {error ? <div className="alert alert-warning page-alert">{error}</div> : null}
+
+      <StatGrid items={statCards} />
+
+      <MiniBarChart
+        title="Top produits demandes"
+        data={demandesByProduit}
+        emptyLabel="Aucune demande en attente pour le magasinier."
+      />
 
       <div className="workflow-grid">
         <section className="workflow-card">
