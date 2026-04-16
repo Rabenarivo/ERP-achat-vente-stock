@@ -28,8 +28,8 @@ public class Livraison {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @JoinColumn(name = "entreprise_id")
+    private Client entreprise;
 
     private LocalDateTime dateCreation;
 
@@ -64,8 +64,8 @@ public class Livraison {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
-    public Department getDepartment() { return department; }
-    public void setDepartment(Department department) { this.department = department; }
+    public Client getEntreprise() { return entreprise; }
+    public void setEntreprise(Client entreprise) { this.entreprise = entreprise; }
 
     public LocalDateTime getDateCreation() { return dateCreation; }
     public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }

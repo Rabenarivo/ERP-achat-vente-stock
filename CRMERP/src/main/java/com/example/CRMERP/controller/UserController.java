@@ -47,6 +47,11 @@ public class UserController {
         departmentPayload.put("nom", user.getDepartment() != null ? user.getDepartment().getNom() : null);
         departmentPayload.put("scores", user.getDepartment() != null ? String.valueOf(user.getDepartment().getScores()) : null);
 
+        Map<String, Object> entreprisePayload = new HashMap<>();
+        entreprisePayload.put("id", user.getEntreprise() != null ? user.getEntreprise().getId() : null);
+        entreprisePayload.put("nom", user.getEntreprise() != null ? user.getEntreprise().getNom() : null);
+        entreprisePayload.put("email", user.getEntreprise() != null ? user.getEntreprise().getEmail() : null);
+
         Map<String, Object> userPayload = new HashMap<>();
         userPayload.put("id", user.getId());
         userPayload.put("nom", user.getNom());
@@ -54,6 +59,7 @@ public class UserController {
         userPayload.put("password", null);
         userPayload.put("enabled", user.getEnabled());
         userPayload.put("department", departmentPayload);
+        userPayload.put("entreprise", entreprisePayload);
         userPayload.put("roles", user.getRoles());
 
         Map<String, Object> response = new HashMap<>();

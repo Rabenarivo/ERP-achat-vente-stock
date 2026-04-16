@@ -58,6 +58,7 @@ CREATE TABLE users (
     email VARCHAR(150) UNIQUE,
     password VARCHAR(255),
     enabled BOOLEAN DEFAULT TRUE,
+    entreprise_id INT,
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
@@ -70,6 +71,10 @@ CREATE TABLE clients (
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
+
+ALTER TABLE users
+ADD CONSTRAINT fk_users_entreprise
+FOREIGN KEY (entreprise_id) REFERENCES clients(id);
 
 CREATE TABLE produits (
     id SERIAL PRIMARY KEY,
@@ -264,6 +269,9 @@ INSERT INTO clients (nom, email, telephone, department_id) VALUES
 ('Entreprise Alpha', 'alpha@mail.com', '0340000001', 4),
 ('Entreprise Beta', 'beta@mail.com', '0340000002', 4);
 
+UPDATE users SET entreprise_id = 1 WHERE id IN (1,2,3,4,5,6,7);
+
+
 -- Produits
 INSERT INTO produits (nom, prix, stock, department_id) VALUES
 ('Ordinateur HP', 1500000, 10, 5),
@@ -320,6 +328,7 @@ stock_min = 0;
 CREATE TABLE livraisons (
     id SERIAL PRIMARY KEY,
     commande_id INT NOT NULL,
+    entreprise_id INT NOT NULL,
     reference VARCHAR(100) UNIQUE,
     statut VARCHAR(30) NOT NULL DEFAULT 'BROUILLON',
     date_livraison TIMESTAMP,
@@ -329,11 +338,13 @@ CREATE TABLE livraisons (
     date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (commande_id) REFERENCES commandes(id),
+    FOREIGN KEY (entreprise_id) REFERENCES clients(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
 CREATE INDEX idx_livraisons_commande_id ON livraisons(commande_id);
+CREATE INDEX idx_livraisons_entreprise_id ON livraisons(entreprise_id);
 CREATE INDEX idx_livraisons_statut ON livraisons(statut);
 
 

@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { label: "Accueil", path: "/dashboard", minScore: 0 },
   { label: "Workflow Demande d'achat", path: "/pages/type-10", requiredScore: 10 },
   { label: "Demande d'achat", path: "/pages/type-50", requiredScore: 50 },
+  { label: "Assignement Livraison", path: "/pages/type-60", requiredScore: 60 },
   { label: "Validation Offres", path: "/pages/type-70", requiredScore: 70 },
   { label: "Validation Proforma et Envoi BC", path: "/pages/type-80", requiredScore: 80 },
   { label: "Proformas Acceptees", path: "/pages/type-80-acceptee", requiredScore: 80 },

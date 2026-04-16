@@ -31,6 +31,7 @@ D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\User.
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\users_roles.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\WorkflowLog.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\BonCommandeRepository.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\CommandeRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\DemandeAchatRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\DepartmentRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\FactureRepository.java
