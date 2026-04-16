@@ -7,6 +7,7 @@ import Unauthorized from "./pages/common/Unauthorized";
 import Type10Page from "./pages/types/type10Pages";
 import Type70Page from "./pages/types/Type70Page";
 import Type80Page from "./pages/types/Type80Page";
+import Type80AcceptedPage from "./pages/types/Type80AcceptedPage";
 import Type100Page from "./pages/types/Type100Page";
 import DemandeAchatPage from "./pages/demandes-achat/DemandeAchatPage";
 import PageLayout from "./components/PageLayout";
@@ -76,6 +77,15 @@ function App() {
             element={
               <ProtectedPage requiredScore={80}>
                 <Type80Page />
+              </ProtectedPage>
+            }
+          />
+
+          <Route
+            path="/pages/type-80-acceptee"
+            element={
+              <ProtectedPage requiredScore={80}>
+                <Type80AcceptedPage />
               </ProtectedPage>
             }
           />

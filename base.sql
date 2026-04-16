@@ -21,6 +21,9 @@ DROP TABLE IF EXISTS user_roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
+DROP TABLE IF EXISTS livraisons CASCADE;
+DROP TABLE IF EXISTS factures CASCADE;
+DROP TABLE IF EXISTS paiements CASCADE;
 
 SET session_replication_role = DEFAULT;
 
@@ -153,6 +156,7 @@ CREATE TABLE demandes_achat (
     department_id INT,
     statut VARCHAR(50),
     user_id INT,
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (department_id) REFERENCES departments(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -230,14 +234,16 @@ INSERT INTO departments (nom, scores) VALUES
 ('RH', 70),
 ('Commercial', 90),
 ('IT', 50),
-('Magasiner', 10);
+('Magasiner', 10),
+('Livreur', 60);
 
 -- Roles
 INSERT INTO roles (nom) VALUES
 ('ADMIN'),
 ('FINANCE'),
 ('RH'),
-('USER');
+('USER'),
+('LIVREUR');
 
 -- Users
 INSERT INTO users (nom, email, password, enabled, department_id) VALUES
@@ -246,7 +252,8 @@ INSERT INTO users (nom, email, password, enabled, department_id) VALUES
 ('Marie RH', 'rh@company.com', '1234', TRUE, 3),
 ('Lucas Commercial', 'commercial@company.com', '1234', TRUE, 4),
 ('Kevin IT', 'it@company.com', '1234', TRUE, 5),
-('Tojo Magasiner', 'magasiner@company.com', '1234', TRUE, 6);
+('Tojo Magasiner', 'magasiner@company.com', '1234', TRUE, 6),
+('David Livreur', 'livreur@company.com', '1234', TRUE, 7);
 
 -- User Roles
 INSERT INTO user_roles VALUES
@@ -294,6 +301,90 @@ INSERT INTO department_access VALUES
 (4,4),
 (5,5),(5,2);
 
+
+
+ALTER TABLE produits ADD COLUMN stock_disponible INT NOT NULL DEFAULT 0;
+ALTER TABLE produits ADD COLUMN stock_reserve INT NOT NULL DEFAULT 0;
+ALTER TABLE produits ADD COLUMN stock_min INT NOT NULL DEFAULT 0;
+
+
+UPDATE produits
+SET stock_disponible = COALESCE(stock, 0),
+stock_reserve = 0,
+stock_min = 0;
+
+
+-- =====================================
+-- LIVRAISONS
+-- =====================================
+CREATE TABLE livraisons (
+    id SERIAL PRIMARY KEY,
+    commande_id INT NOT NULL,
+    reference VARCHAR(100) UNIQUE,
+    statut VARCHAR(30) NOT NULL DEFAULT 'BROUILLON',
+    date_livraison TIMESTAMP,
+    commentaire TEXT,
+    user_id INT,
+    department_id INT,
+    date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (commande_id) REFERENCES commandes(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+CREATE INDEX idx_livraisons_commande_id ON livraisons(commande_id);
+CREATE INDEX idx_livraisons_statut ON livraisons(statut);
+
+
+-- =====================================
+-- FACTURES
+-- =====================================
+CREATE TABLE factures (
+    id SERIAL PRIMARY KEY,
+    livraison_id INT NOT NULL,
+    client_id INT NOT NULL,
+    reference VARCHAR(100) UNIQUE,
+    statut VARCHAR(30) NOT NULL DEFAULT 'BROUILLON',
+    montant_ht NUMERIC(12,2) NOT NULL DEFAULT 0,
+    tva NUMERIC(12,2) NOT NULL DEFAULT 0,
+    montant_ttc NUMERIC(12,2) NOT NULL DEFAULT 0,
+    date_facture TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_echeance DATE,
+    department_id INT,
+
+    FOREIGN KEY (livraison_id) REFERENCES livraisons(id),
+    FOREIGN KEY (client_id) REFERENCES clients(id),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+CREATE INDEX idx_factures_livraison_id ON factures(livraison_id);
+CREATE INDEX idx_factures_client_id ON factures(client_id);
+CREATE INDEX idx_factures_statut ON factures(statut);
+
+
+-- =====================================
+-- PAIEMENTS
+-- =====================================
+CREATE TABLE paiements (
+    id SERIAL PRIMARY KEY,
+    facture_id INT NOT NULL,
+    reference VARCHAR(100) UNIQUE,
+    mode_paiement VARCHAR(30) NOT NULL,
+    statut VARCHAR(30) NOT NULL DEFAULT 'VALIDE',
+    montant NUMERIC(12,2) NOT NULL,
+    date_paiement TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    commentaire TEXT,
+    user_id INT,
+    department_id INT,
+
+    FOREIGN KEY (facture_id) REFERENCES factures(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+CREATE INDEX idx_paiements_facture_id ON paiements(facture_id);
+CREATE INDEX idx_paiements_statut ON paiements(statut);
 -- SELECT d.nom,d.id
 -- FROM department_access da
 -- JOIN departments d ON d.id = da.can_view_department_id

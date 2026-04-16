@@ -114,6 +114,12 @@ public class ProformatController {
         return proformaService.findAll();
     }
 
+    @GetMapping("/accepte")
+    public List<Proforma> getvalide() {
+        return proformaService.getAccepteList();
+    }
+    
+
     @PostMapping("/save-bc")
     @Transactional
     public ResponseEntity<?> saveBc(@RequestBody Map<String, Object> request) {

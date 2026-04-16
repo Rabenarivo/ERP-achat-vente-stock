@@ -36,6 +36,10 @@ public class ProformaService {
         return proformaRepository.findByStatut("EN_ATTENTE_VALIDATION");
     }
 
+    public List<Proforma> getAccepteList(){
+        return proformaRepository.findByStatut("ACCEPTEE");
+    }
+
     public BonCommande saveBonCommandeFromProforma(Long proformaId, String decisionStatut) {
         Proforma proforma = proformaRepository.findById(proformaId)
                 .orElseThrow(() -> new IllegalArgumentException("Proforma introuvable: " + proformaId));
@@ -71,6 +75,10 @@ public class ProformaService {
         }
 
         throw new IllegalArgumentException("Statut invalide. Valeurs acceptees: ACCEPTEE ou REFUSEE.");
+    }
+
+    public List<Proforma> getProformaBystatut() {
+        return proformaRepository.findByStatut("ACCEPTEE");
     }
 
     
