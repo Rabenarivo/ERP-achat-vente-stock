@@ -10,6 +10,11 @@ import Type80Page from "./pages/types/Type80Page";
 import Type80AcceptedPage from "./pages/types/Type80AcceptedPage";
 import Type100Page from "./pages/types/Type100Page";
 import Type120Page from "./pages/types/Type120Page";
+import Type120WorkflowPage from "./pages/types/Type120WorkflowPage";
+import Type120UsersPage from "./pages/types/Type120UsersPage";
+import Type120DepartmentsPage from "./pages/types/Type120DepartmentsPage";
+import Type120ProduitsPage from "./pages/types/Type120ProduitsPage";
+import Type120FacturesPage from "./pages/types/Type120FacturesPage";
 import Type60Page from "./pages/types/Type60Page";
 import DemandeAchatPage from "./pages/demandes-achat/DemandeAchatPage";
 import PageLayout from "./components/PageLayout";
@@ -114,6 +119,46 @@ function App() {
             element={
               <ProtectedPage requiredScore={120}>
                 <Type120Page />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/workflow"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120WorkflowPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/users"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120UsersPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/departements"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120DepartmentsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/produits"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120ProduitsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/factures"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120FacturesPage />
               </ProtectedPage>
             }
           />

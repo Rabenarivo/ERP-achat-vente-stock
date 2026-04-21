@@ -87,6 +87,37 @@ public class ProduitController {
         return List.copyOf(uniqueById.values());
     }
 
+    @GetMapping("/list")
+    public List<Produit> listProduits() {
+        return service.findAllProduit();
+    }
+
+    @PutMapping("/{produitId}/department")
+    public ResponseEntity<?> assignDepartment(
+            @PathVariable Long produitId,
+            @RequestBody Map<String, Object> request
+    ) {
+        Produit produit = produitRepository.findById(produitId).orElse(null);
+        if (produit == null) {
+            throw new IllegalArgumentException("Produit not found");
+        }
+
+        Object departmentIdRaw = request.get("departmentId");
+        Department department = null;
+
+        if (departmentIdRaw != null && !departmentIdRaw.toString().isBlank()) {
+            Long departmentId = Long.valueOf(departmentIdRaw.toString());
+            department = departmentService.findById(departmentId);
+            if (department == null) {
+                throw new IllegalArgumentException("Department not found");
+            }
+        }
+
+        produit.setDepartment(department);
+        Produit updated = service.save(produit);
+        return ResponseEntity.ok(updated);
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Map<String, Object> request) {
         Object nomRaw = request.get("nom");

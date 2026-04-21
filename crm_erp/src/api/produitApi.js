@@ -9,3 +9,13 @@ export const filterProduitsByName = (param) => {
     params: { param: normalizedParam },
   });
 };
+
+export const getProduits = () => {
+  return axios.get(`${API_URL}/list`);
+};
+
+export const assignProduitDepartment = (produitId, departmentId) => {
+  return axios.put(`${API_URL}/${produitId}/department`, {
+    departmentId,
+  });
+};
