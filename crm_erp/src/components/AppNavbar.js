@@ -14,6 +14,11 @@ const NAV_ITEMS = [
   { label: "Proformas Acceptees", path: "/pages/type-80-acceptee", requiredScore: 80 },
   { label: "Creation Proformat (Admin)", path: "/pages/type-100", requiredScore: 100 },
   { label: "Administration complete", path: "/pages/type-120", requiredScore: 120 },
+  { label: "Admin Workflow", path: "/pages/type-120/workflow", requiredScore: 120 },
+  { label: "Admin Utilisateurs", path: "/pages/type-120/users", requiredScore: 120 },
+  { label: "Admin Departements", path: "/pages/type-120/departements", requiredScore: 120 },
+  { label: "Admin Produits", path: "/pages/type-120/produits", requiredScore: 120 },
+  { label: "Admin Factures", path: "/pages/type-120/factures", requiredScore: 120 },
 ];
 
 export default function AppNavbar() {
