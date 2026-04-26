@@ -10,6 +10,7 @@ D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\O
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\PaiementController.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\ProduitController.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\ProformatController.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\RetourLivraisonController.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\RoleController.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\UserController.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\controller\WorkflowLogControlle.java
@@ -22,10 +23,13 @@ D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Depar
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Facture.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Fournisseur.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Livraison.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\LivraisonLot.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Offre.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Paiement.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Produit.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Proforma.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\RetourLivraison.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\RetourLivraisonLigne.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\Role.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\StockMovement.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\entity\User.java
@@ -37,11 +41,14 @@ D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\D
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\DepartmentRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\FactureRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\FournisseurRepository.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\LivraisonLotRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\LivraisonRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\OffresRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\PaiementRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\ProduitRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\ProformaRepository.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\RetourLivraisonLigneRepository.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\RetourLivraisonRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\RoleRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\StockMouvementRepository.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\repository\UserRepository.java
@@ -55,6 +62,7 @@ D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\Offr
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\PaiementService.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\ProduitService.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\ProformaService.java
+D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\RetourLivraisonService.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\RoleService.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\StockMouvementService.java
 D:\ITU\PERSO\CRMERP\CRM+ERP\CRMERP\src\main\java\com\example\CRMERP\service\UserService.java

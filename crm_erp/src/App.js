@@ -15,6 +15,7 @@ import Type120UsersPage from "./pages/types/Type120UsersPage";
 import Type120DepartmentsPage from "./pages/types/Type120DepartmentsPage";
 import Type120ProduitsPage from "./pages/types/Type120ProduitsPage";
 import Type120FacturesPage from "./pages/types/Type120FacturesPage";
+import Type120RetoursPage from "./pages/types/Type120RetoursPage";
 import Type60Page from "./pages/types/Type60Page";
 import DemandeAchatPage from "./pages/demandes-achat/DemandeAchatPage";
 import PageLayout from "./components/PageLayout";
@@ -159,6 +160,14 @@ function App() {
             element={
               <ProtectedPage requiredScore={120}>
                 <Type120FacturesPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/pages/type-120/retours"
+            element={
+              <ProtectedPage requiredScore={120}>
+                <Type120RetoursPage />
               </ProtectedPage>
             }
           />

@@ -7,6 +7,7 @@ const ADMIN_SECTIONS = [
   { label: "Departements", path: "/pages/type-120/departements" },
   { label: "Produits", path: "/pages/type-120/produits" },
   { label: "Factures", path: "/pages/type-120/factures" },
+  { label: "Retours", path: "/pages/type-120/retours" },
 ];
 
 export default function Type120AdminNav() {

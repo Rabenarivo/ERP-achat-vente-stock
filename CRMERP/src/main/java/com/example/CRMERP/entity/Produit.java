@@ -28,6 +28,12 @@ public class Produit {
     @Column(name = "stock_min")
     private Integer stockMin = 0;
 
+    @Column(name = "stock_quarantaine")
+    private Integer stockQuarantaine = 0;
+
+    @Column(name = "stock_hs")
+    private Integer stockHs = 0;
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "department_id")
     private Department department;
@@ -68,6 +74,22 @@ public class Produit {
 
     public void setStockMin(Integer stockMin) {
         this.stockMin = stockMin;
+    }
+
+    public Integer getStockQuarantaine() {
+        return stockQuarantaine;
+    }
+
+    public void setStockQuarantaine(Integer stockQuarantaine) {
+        this.stockQuarantaine = stockQuarantaine;
+    }
+
+    public Integer getStockHs() {
+        return stockHs;
+    }
+
+    public void setStockHs(Integer stockHs) {
+        this.stockHs = stockHs;
     }
 
     public Department getDepartment() { return department; }
