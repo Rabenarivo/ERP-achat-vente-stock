@@ -17,6 +17,15 @@ public class StockMovement {
 
     private String commentaire;
 
+    @Column(name = "source_type")
+    private String sourceType;
+
+    @Column(name = "source_id")
+    private Integer sourceId;
+
+    @Column(name = "etat_produit")
+    private String etatProduit;
+
     private LocalDateTime dateMouvement;
 
     @ManyToOne
@@ -50,6 +59,30 @@ public class StockMovement {
     public String getCommentaire() { return commentaire; }
 
     public void setCommentaire(String commentaire) { this.commentaire = commentaire; }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public Integer getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(Integer sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getEtatProduit() {
+        return etatProduit;
+    }
+
+    public void setEtatProduit(String etatProduit) {
+        this.etatProduit = etatProduit;
+    }
 
     public LocalDateTime getDateMouvement() { return dateMouvement; }
 

@@ -2,6 +2,7 @@ package com.example.CRMERP.controller;
 
 import com.example.CRMERP.service.LivraisonService;
 import com.example.CRMERP.entity.Livraison;
+import com.example.CRMERP.entity.LivraisonLot;
 import com.example.CRMERP.entity.Produit;
 import com.example.CRMERP.entity.StockMovement;
 import com.example.CRMERP.entity.BonCommande;
@@ -11,6 +12,7 @@ import com.example.CRMERP.entity.User;
 import com.example.CRMERP.entity.WorkflowLog;
 import com.example.CRMERP.repository.BonCommandeRepository;
 import com.example.CRMERP.repository.CommandeRepository;
+import com.example.CRMERP.repository.LivraisonLotRepository;
 import com.example.CRMERP.repository.LivraisonRepository;
 import com.example.CRMERP.repository.ProduitRepository;
 import com.example.CRMERP.repository.ProformaRepository;
@@ -43,6 +45,7 @@ public class LivraisonController {
     private final ProformaRepository proformaRepository;
     private final BonCommandeRepository bonCommandeRepository;
     private final LivraisonRepository livraisonRepository;
+    private final LivraisonLotRepository livraisonLotRepository;
     private final ProduitRepository produitRepository;
     private final UserRepository userRepository;
     private final StockMouvementService stockMouvementService;
@@ -53,6 +56,7 @@ public class LivraisonController {
         ProformaRepository proformaRepository,
         BonCommandeRepository bonCommandeRepository,
         LivraisonRepository livraisonRepository,
+        LivraisonLotRepository livraisonLotRepository,
         ProduitRepository produitRepository,
         UserRepository userRepository,
         StockMouvementService stockMouvementService) 
@@ -63,6 +67,7 @@ public class LivraisonController {
         this.proformaRepository = proformaRepository;
         this.bonCommandeRepository = bonCommandeRepository;
         this.livraisonRepository = livraisonRepository;
+        this.livraisonLotRepository = livraisonLotRepository;
         this.produitRepository = produitRepository;
         this.userRepository = userRepository;
         this.stockMouvementService = stockMouvementService;
@@ -205,6 +210,10 @@ public class LivraisonController {
                 throw new IllegalArgumentException("Cette livraison appartient à une autre entreprise.");
             }
 
+            if ("LIVREE".equalsIgnoreCase(String.valueOf(livraison.getStatut()))) {
+                throw new IllegalArgumentException("Cette livraison est deja marquee LIVREE.");
+            }
+
             livraison.setUser(user);
             livraison.setStatut("PRETE");
             Livraison saved = livraisonRepository.save(livraison);
@@ -292,6 +301,8 @@ public class LivraisonController {
                 produit.setStockDisponible(0);
                 produit.setStockReserve(0);
                 produit.setStockMin(stockMin != null ? stockMin : 0);
+                produit.setStockQuarantaine(0);
+                produit.setStockHs(0);
                 produit.setDepartment(null);
             } else {
                 if (prixProduit != null && prixProduit >= 0) {
@@ -312,8 +323,20 @@ public class LivraisonController {
             movement.setType("ENTREE_LIVRAISON");
             movement.setQuantite(quantiteEntree);
             movement.setUser(user);
+            movement.setSourceType("LIVRAISON");
+            movement.setSourceId(livraison.getId().intValue());
+            movement.setEtatProduit("CONFORME");
             movement.setCommentaire("ENTREE de " + quantiteEntree + " pour livraison " + (livraison.getReference() != null ? livraison.getReference() : livraison.getId()));
             stockMouvementService.save(movement);
+
+            LivraisonLot lot = new LivraisonLot();
+            lot.setLivraison(livraison);
+            lot.setProduit(savedProduit);
+            lot.setLotReference((livraison.getReference() != null ? livraison.getReference() : "LIV-" + livraison.getId()) + "-LOT-1");
+            lot.setQuantiteLivree(quantiteEntree);
+            lot.setQuantiteRetournee(0);
+            lot.setStatutQualite("CONFORME");
+            livraisonLotRepository.save(lot);
 
             livraison.setStatut("LIVREE");
             Livraison saved = livraisonRepository.save(livraison);

@@ -5,6 +5,9 @@ SET session_replication_role = replica;
 
 DROP TABLE IF EXISTS workflow_logs CASCADE;
 DROP TABLE IF EXISTS stock_movements CASCADE;
+DROP TABLE IF EXISTS retour_livraison_lignes CASCADE;
+DROP TABLE IF EXISTS retours_livraison CASCADE;
+DROP TABLE IF EXISTS livraison_lots CASCADE;
 DROP TABLE IF EXISTS offres CASCADE;
 DROP TABLE IF EXISTS department_access CASCADE;
 DROP TABLE IF EXISTS bon_commandes CASCADE;
@@ -329,12 +332,16 @@ INSERT INTO department_access VALUES
 ALTER TABLE produits ADD COLUMN stock_disponible INT NOT NULL DEFAULT 0;
 ALTER TABLE produits ADD COLUMN stock_reserve INT NOT NULL DEFAULT 0;
 ALTER TABLE produits ADD COLUMN stock_min INT NOT NULL DEFAULT 0;
+ALTER TABLE produits ADD COLUMN stock_quarantaine INT NOT NULL DEFAULT 0;
+ALTER TABLE produits ADD COLUMN stock_hs INT NOT NULL DEFAULT 0;
 
 
 UPDATE produits
 SET stock_disponible = COALESCE(stock, 0),
 stock_reserve = 0,
-stock_min = 0;
+stock_min = 0,
+stock_quarantaine = 0,
+stock_hs = 0;
 
 
 -- =====================================

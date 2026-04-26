@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { label: "Admin Departements", path: "/pages/type-120/departements", requiredScore: 120 },
   { label: "Admin Produits", path: "/pages/type-120/produits", requiredScore: 120 },
   { label: "Admin Factures", path: "/pages/type-120/factures", requiredScore: 120 },
+  { label: "Admin Retours", path: "/pages/type-120/retours", requiredScore: 120 },
 ];
 
 export default function AppNavbar() {

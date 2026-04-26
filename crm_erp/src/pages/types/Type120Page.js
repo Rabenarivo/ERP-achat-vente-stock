@@ -27,6 +27,11 @@ const ADMIN_CARDS = [
     description: "Analyser toutes les factures et leurs statuts.",
     path: "/pages/type-120/factures",
   },
+  {
+    title: "Retours livraison",
+    description: "Gerer les retours de lots defectueux ou HS.",
+    path: "/pages/type-120/retours",
+  },
 ];
 
 export default function Type120Page() {
