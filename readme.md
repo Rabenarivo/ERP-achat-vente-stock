@@ -4,7 +4,6 @@
 
 Ce projet est un système complet de gestion d’entreprise combinant :
 
-* **CRM (Customer Relationship Management)** → gestion des clients et des ventes
 * **ERP (Enterprise Resource Planning)** → gestion interne (stock, finance, achats)
 
 ---
